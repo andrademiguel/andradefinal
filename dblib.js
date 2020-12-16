@@ -9,7 +9,7 @@ const pool = new Pool({
 });
 
 const getTotalRecords = () => {
-    sql = "SELECT COUNT(*) FROM car";
+    sql = "SELECT COUNT(*) FROM book";
     return pool.query(sql)
         .then(result => {
             return {
@@ -24,83 +24,90 @@ const getTotalRecords = () => {
         });
 };
 
-const insertCar = (car) => {
+const insertbook = (book) => {
 
-    if (car instanceof Array) {
-        params = car;
+    if (book instanceof Array) {
+        params = book;
     } else {
-        params = Object.values(car);
+        params = Object.values(book);
     };
 
-    const sql = `INSERT INTO car (carvin, carmake, carmodel, carmileage)
-                 VALUES ($1, $2, $3, $4)`;
+    const sql = `INSERT INTO book (book_id, title, total_pages, rating, isbn, published_date)
+                 VALUES ($1, $2, $3, $4, $5, $6)`;
 
     return pool.query(sql, params)
         .then(res => {
             return {
                 trans: "success", 
-                msg: `car id ${params[0]} successfully inserted`
+                msg: `book id ${params[0]} successfully inserted`
             };
         })
         .catch(err => {
             return {
                 trans: "fail", 
-                msg: `Error on insert of car id ${params[0]}.  ${err.message}`
+                msg: `Error on insert of book id ${params[0]}.  ${err.message}`
             };
         });
 };
 
-const findCar = (car) => {
-    // Will build query based on data provided from the form
-    //  Use parameters to avoid sql injection
+// const findBook = (book) => {
 
-    // Declare variables
-    var i = 1;
-    params = [];
-    sql = "SELECT * FROM car WHERE true";
+//     var i = 1;
+//     params = [];
+//     sql = "SELECT * FROM book WHERE true";
 
-    // Check data provided and build query as necessary
-    if (car.carvin !== "") {
-        params.push(parseInt(car.carvin));
-        sql += ` AND carvin = $${i}`;
-        i++;
-    };
-    if (car.carmake !== "") {
-        params.push(`${car.carmake}%`);
-        sql += ` AND UPPER(carmake) LIKE UPPER($${i})`;
-        i++;
-    };
-    if (car.carmodel !== "") {
-        params.push(`${car.carmodel}%`);
-        sql += ` AND UPPER(carmodel) LIKE UPPER($${i})`;
-        i++;
-    };
-    if (car.carmileage !== "") {
-        params.push(parseFloat(car.carmileage));
-        sql += ` AND carmileage >= $${i}`;
-        i++;
-    };
+//     if (book.book_id !== "") {
+//         params.push(parseInt(book.book_id));
+//         sql += ` AND book_id = $${i}`;
+//         i++;
+//     };
+//     if (book.title !== "") {
+//         params.push(`${book.title}%`);
+//         sql += ` AND UPPER(title) LIKE UPPER($${i})`;
+//         i++;
+//     };
+//     if (book.total_pages !== "") {
+//         params.push(`${book.total_pages}%`);
+//         sql += ` AND UPPER(total_pages) LIKE UPPER($${i})`;
+//         i++;
+//     };
+//     if (book.rating !== "") {
+//         params.push(parseFloat(book.rating));
+//         sql += ` AND rating >= $${i}`;
+//         i++;
+//     };
+//     if (book.isbn !== "") {
+//         params.push(parseFloat(book.isbn));
+//         sql += ` AND isbn >= $${i}`;
+//         i++;
+//     };
 
-    sql += ` ORDER BY carvin`;
-    // for debugging
-    console.log("sql: " + sql);
-    console.log("params: " + params);
+//     if (book.published_date !== "") {
+//         params.push(parseFloat(book.published_date));
+//         sql += ` AND published_date >= $${i}`;
+//         i++;
+//     };
 
-    return pool.query(sql, params)
-        .then(result => {
-            return {
-                trans: "success",
-                result: result.rows
-            }
-        })
-        .catch(err => {
-            return {
-                trans: "Error",
-                result: `Error: ${err.message}`
-            }
-        });
-};
+//     sql += ` ORDER BY book_id`;
+//     // for debugging
+//     console.log("sql: " + sql);
+//     console.log("params: " + params);
 
-module.exports.findCar = findCar;
-module.exports.insertCar = insertCar;
+//     return pool.query(sql, params)
+//         .then(result => {
+//             return {
+//                 trans: "success",
+//                 result: result.rows
+//             }
+//         })
+//         .catch(err => {
+//             return {
+//                 trans: "Error",
+//                 result: `Error: ${err.message}`
+//             }
+//         });
+// };
+
+// module.exports.findBook = findBook;
+module.exports.insertbook = insertbook;
 module.exports.getTotalRecords = getTotalRecords;
